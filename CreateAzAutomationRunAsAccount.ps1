@@ -214,3 +214,20 @@ Connect-AzAccount -Subscription $SubscriptionId
 [string] $CerCertPathForRunAsAccount = Join-Path -Path $env:TEMP -ChildPath ($CertificateName + ".cer")
 CreateSelfSignedCertificate $CertificateName $SelfSignedCertPlainPasswd $PfxCertPathForRunAsAccount $CerCertPathForRunAsAccount $SelfSignedCertNoOfMonthsUntilExpired
 
+# Create a service principal
+[System.Security.Cryptography.X509Certificates.X509Certificate2] $PfxCert = [System.Security.Cryptography.X509Certificates.X509Certificate2]::new($PfxCertPathForRunAsAccount, $SelfSignedCertPlainPasswd)
+[string] $ApplicationId = CreateServicePrincipal $PfxCert $ApplicationDisplayName
+
+# Create the Automation certificate asset
+CreateAutomationCertificateAsset $ResourceGroup $AutomationAccountName $CertifcateAssetName $PfxCertPathForRunAsAccount $SelfSignedCertPlainPasswd $true
+
+# Populate the ConnectionFieldValues
+[hashtable] $ConnectionFieldValues = @{
+    ApplicationId = $ApplicationId
+    TenantId = $Subscription.TenantId
+    CertificateThumbprint = $PfxCert.Thumbprint
+    SubscriptionId = $SubscriptionId
+}
+
+# Create an Automation connection asset named AzRunAsCon in the Automation account. This connection uses the service principal.
+CreateAutomationConnectionAsset $ResourceGroup $AutomationAccountName $ConnectionAssetName $ConnectionTypeName $ConnectionFieldValues
