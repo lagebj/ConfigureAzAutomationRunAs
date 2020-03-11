@@ -1,18 +1,11 @@
-# ConfigureVseSubscription
+# ConfigureAzAutomationRunAs
 
-Scripts for configuring a fresh Visual Studio Enterprise (MPN) subscription.
+This is a Powershell script for creating a Resource Group, an Automation Account and an Automation Run As account in Visual Studio subscription.
 
+## More information
 
-[Naming standard](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/naming-and-tagging)
+For more information
 
-Region: North Europe
-
-1. Create Resource Group
-
-[hashtable] $ResourceGroup = @{
-    Name = 'rg-vseautomation-001'
-    Location = 'North Europe'
-}
-
-2. Create Automation Account
-
+* [lagebj.github.io](https://lagebj.github.io)
+* [Recommended naming and tagging conventions](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/naming-and-tagging)
+* [Manage Azure Automation Run As accounts](https://docs.microsoft.com/en-us/azure/automation/manage-runas-account)
